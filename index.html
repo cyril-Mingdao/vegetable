@@ -2215,6 +2215,8 @@
             z-index: 10000;
         }
 
+        /* 點圖播讀音 */
+        .tv-screen, .tv-screen img, .buzzer-image-container { cursor: pointer; }
     </style>
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
@@ -3007,5 +3009,35 @@
             }
         });
     </script>
+<script src="https://cyril-mingdao.github.io/taigi-class-games/assets/snd-plus.js"></script>
+<script>
+/* 點圖播正確讀音 image-audio */
+/* 題目頁、範例題、搶答頁：點圖片播「正確選項」讀音。
+   先播教育部《臺灣台語常用詞辭典》官方錄音；辭典查無整詞錄音（或音檔載入失敗）時，改用自製 snd-plus.js 組合音。 */
+(function () {
+    var MAP = {"q|西瓜":["si-kue","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/2/2839.mp3"],"q|豌豆":["hô-lân-tāu",""],"q|百香果":["sî-kè-kó","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/14/14205.mp3"],"q|樹子":["phuà-pòo-tsí","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/6/6387.mp3"],"b|百香果":["sî-kè-kó","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/14/14205.mp3"],"b|樹子":["phuà-pòo-tsí","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/6/6387.mp3"],"q|小黃瓜":["kue-á-nî","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/1/1876.mp3"],"q|四季豆":["bín-tāu","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/7/7346.mp3"],"q|大白菜":["tang-pe̍h-á",""],"b|豌豆":["hô-lân-tāu",""],"b|小黃瓜":["kue-á-nî","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/1/1876.mp3"],"q|大黃瓜":["tshì-kue-á","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/3/3625.mp3"],"q|奇異果":["kâu-thâu-kó",""],"q|大陸妹":["e-á-tshài","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/9/9891.mp3"],"b|四季豆":["bín-tāu","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/7/7346.mp3"],"b|大白菜":["tang-pe̍h-á",""],"q|香菜":["iân-sui","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/4/4461.mp3"],"q|菠菜":["pue-lîng-á",""],"q|鳳梨":["ông-lâi","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/1/1260.mp3"],"b|菠菜":["pue-lîng-á",""],"b|奇異果":["kâu-thâu-kó",""],"q|草莓":["tsháu-m̂","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/24/24543.mp3"],"q|青江菜":["thng-sî-á-tshài","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/8/8553.mp3"],"q|香瓜":["phang-kue","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/4/4434.mp3"],"b|香菜":["iân-sui","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/4/4461.mp3"],"b|青江菜":["thng-sî-á-tshài","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/8/8553.mp3"],"q|蠶豆":["tshân-tāu","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/13/13340.mp3"],"q|絲瓜":["tshài-kue","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/8/8940.mp3"],"q|芒果":["suāinn-á","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/12/12189.mp3"],"b|大黃瓜":["tshì-kue-á","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/3/3625.mp3"],"b|草莓":["tsháu-m̂","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/24/24543.mp3"],"q|青椒":["tāi-tông-á","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/0/305.mp3"],"q|空心菜":["ìng-tshài","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/12/12327.mp3"],"q|荔枝":["nāi-tsi","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/6/6646.mp3"],"b|空心菜":["ìng-tshài","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/12/12327.mp3"],"b|蠶豆":["tshân-tāu","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/13/13340.mp3"],"q|小番茄/西紅柿":["kam-á-bi̍t","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/5/5090.mp3"],"q|萵苣":["ue-á-tshài",""],"q|瓠瓜":["pû-á","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/7/7031.mp3"],"b|萵苣":["ue-á-tshài",""],"b|青椒":["tāi-tông-á","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/0/305.mp3"],"q|過溝菜":["kueh-niau","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/11/11899.mp3"],"q|嫩薑":["tsínn-kiunn","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/6/6620.mp3"],"q|糯米":["tsu̍t-bí","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/6/6437.mp3"],"b|嫩薑":["tsínn-kiunn","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/6/6620.mp3"],"b|小番茄":["kam-á-bi̍t","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/5/5090.mp3"],"q|牛蒡":["gôo-bó",""],"q|芥藍菜":["kè-nâ-á","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/4/4477.mp3"],"q|紅蘿蔔":["âng-tshài-thâu","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/5/5419.mp3"],"b|芥藍菜":["kè-nâ-á","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/4/4477.mp3"],"b|過溝菜":["kueh-niau","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/11/11899.mp3"],"q|茄子":["kiô-á",""],"q|豇豆":["tshài-tāu","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/8/8945.mp3"],"q|白蘿蔔":["tshài-thâu","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/8/8970.mp3"],"b|豇豆":["tshài-tāu","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/8/8945.mp3"],"b|牛蒡":["gôo-bó",""],"q|甘藍菜":["ko-lê-tshài","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/6/6902.mp3"],"q|豆芽菜":["tāu-tshài","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/3/3472.mp3"],"q|玉米":["huan-be̍h","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/8/8738.mp3"],"b|豆芽菜":["tāu-tshài","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/3/3472.mp3"],"b|茄子":["kiô-á",""],"q|辣椒":["huan-kiunn-á","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/8/8757.mp3"],"q|番茄":["oo-khī-á",""],"q|玉米筍":["huan-be̍h-sún",""],"b|番茄":["oo-khī-á",""],"b|甘藍菜":["ko-lê-tshài","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/6/6902.mp3"],"q|老薑":["kiunn-bó","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/12/12355.mp3"],"q|佛手瓜":["hiunn-înn-kue","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/14/14184.mp3"],"q|茼蒿":["tang-o","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/5/5485.mp3"],"b|佛手瓜":["hu̍t-tshiú-kue","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/2/2885.mp3"],"b|辣椒":["huan-á-kiunn","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/8/8704.mp3"],"q|南瓜":["kim-kue","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/4/4528.mp3"],"q|龍鬚菜":["kue-á-tshiu",""],"q|花椰菜":["hue-á-tshài",""],"b|龍鬚菜":["kue-á-tshiu",""],"b|老薑":["kiunn-bó","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/12/12355.mp3"],"q|白木耳":["pe̍h-bo̍k-ní","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/1/1871.mp3"],"q|莧菜":["hīng-tshài","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/7/7830.mp3"],"q|花生":["thôo-tāu","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/9/9375.mp3"],"b|莧菜":["hīng-tshài","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/7/7830.mp3"],"b|南瓜":["kim-kue","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/4/4528.mp3"],"q|豆薯":["tāu-á-tsî",""],"q|秋葵":["kak-tāu",""],"q|愛玉":["ò-giô","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/12/12337.mp3"],"b|秋葵":["kak-tāu",""],"b|白木耳":["pe̍h-bo̍k-ní","https://sutian.moe.edu.tw/media/senn/mp3/imtong/subak/1/1871.mp3"]};
+    var au = null, token = 0;
+    function sndPlus(tl) { if (window.MdSnd) window.MdSnd.play(null, tl); }
+    function playWord(kind, alt) {
+        var w = MAP[kind + '|' + alt] || MAP[(kind === 'q' ? 'b' : 'q') + '|' + alt];
+        if (!w) return;
+        var my = ++token;
+        if (au) { try { au.pause(); } catch (e) {} }
+        if (window.MdSnd) window.MdSnd.stop();
+        if (!w[1]) { sndPlus(w[0]); return; }
+        au = au || new Audio();
+        au.onerror = function () { if (my === token) sndPlus(w[0]); };
+        au.src = w[1];
+        var p = au.play();
+        if (p && p.catch) p.catch(function (err) { if (my === token && err && err.name !== 'AbortError') sndPlus(w[0]); });
+    }
+    document.addEventListener('click', function (e) {
+        var box = e.target.closest && e.target.closest('.tv-screen, .buzzer-image-container');
+        if (!box) return;
+        var img = box.querySelector('img');
+        if (img) playWord(box.classList.contains('tv-screen') ? 'q' : 'b', img.getAttribute('alt') || '');
+    }, true);
+})();
+</script>
 </body>
 </html>
